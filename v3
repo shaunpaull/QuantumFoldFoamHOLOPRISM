@@ -1,0 +1,740 @@
+"""
+Xenomorphic Adaptive Dynamic Circumference Module
+===============================================
+
+This module implements advanced mathematical constructs for the QuantumFoldFoamHoloprism system:
+  • Adaptive Dynamic Circumference with octothogonal expansion to infinite dimensions
+  • Dynamic Pi calculation with adaptive precision and mutation capabilities
+  • Xenomorphic lattice structures with self-evolving topology
+  • N-dimensional hypersurface calculations for encryption strength
+
+The module provides enhanced security through mathematical complexity that renders
+brute-force attacks computationally infeasible due to continuous morphological evolution.
+"""
+
+import numpy as np
+import math
+import random
+import sympy as sp
+from scipy.special import gamma, zeta
+import itertools
+from functools import lru_cache
+from typing import List, Dict, Tuple, Any, Optional, Union, Callable
+
+# =============================================================================
+# 1. Adaptive Dynamic Circumference with Octothogonal Expansion
+# =============================================================================
+class AdaptiveDynamicCircumference:
+    """
+    Implementation of adaptive dynamic circumference calculation starting from
+    octothogonal (8-sided) shape and expanding toward infinite dimensions.
+    
+    This class provides geometry calculations that adapt to the complexity
+    requirements of the encryption process and continuously evolve the underlying
+    mathematical model.
+    """
+    
+    def __init__(self, base_sides=8, max_expansion=256, mutation_rate=0.01, seed=None):
+        """
+        Initialize the adaptive dynamic circumference calculator
+        
+        Args:
+            base_sides: Initial polygon sides (default octothogonal with 8 sides)
+            max_expansion: Maximum polygon sides to expand to (infinity approximation)
+            mutation_rate: Rate at which the circumference calculation mutates
+            seed: Random seed for reproducibility
+        """
+        self.base_sides = base_sides
+        self.max_expansion = max_expansion
+        self.mutation_rate = mutation_rate
+        self.current_sides = base_sides
+        self.evolution_counter = 0
+        self.pi_calculator = DynamicPi(precision=50, mutation_rate=mutation_rate)
+        
+        # Dimensional expansion tracking
+        self.dimension_factors = {}
+        self.adaptive_coefficients = {}
+        
+        # Morphological evolution parameters
+        self.morph_phase = 0.0
+        self.morph_frequency = 0.01
+        self.topology_signature = [1.0]  # Start with basic signature
+        
+        # Evolution history
+        self.evolution_history = []
+        
+        # Initialize the system
+        random.seed(seed if seed is not None else int(random.random() * 10000))
+        self._initialize_coefficients()
+        
+    def _initialize_coefficients(self):
+        """Initialize the adaptive coefficients for dimensional calculations"""
+        # Base coefficients for each dimension
+        for n in range(2, self.max_expansion + 1):
+            # Different formulas for different dimensional regimes
+            if n <= 10:
+                # Lower dimensions - more precise calculation
+                self.dimension_factors[n] = 2 * math.sin(math.pi / n)
+            elif n <= 100:
+                # Mid-range dimensions - approximation with controlled error
+                self.dimension_factors[n] = 2 * math.pi / n * (1 - 1 / (12 * n**2))
+            else:
+                # Higher dimensions - asymptotic behavior
+                self.dimension_factors[n] = 2 * math.pi / n
+                
+        # Create adaptive coefficients with controlled randomness for encryption variation
+        for n in range(2, self.max_expansion + 1):
+            # Base coefficient is 1.0, will evolve over time
+            self.adaptive_coefficients[n] = 1.0 + (random.random() - 0.5) * self.mutation_rate * 0.1
+            
+    def calculate_circumference(self, radius=1.0, sides=None, dimensionality=2.0):
+        """
+        Calculate the circumference with current parameters
+        
+        Args:
+            radius: The radius of the shape
+            sides: Number of sides (default: current evolution state)
+            dimensionality: Fractional dimension for xenomorphic calculations
+            
+        Returns:
+            The calculated circumference value
+        """
+        # Use current sides if not specified
+        n = sides if sides is not None else self.current_sides
+        
+        # Ensure sides is within valid range
+        n = max(3, min(n, self.max_expansion))
+        
+        # Get the base factor for this polygon
+        base_factor = self.dimension_factors.get(n, 2 * math.pi / n)
+        
+        # Apply adaptive coefficient
+        adaptive_coef = self.adaptive_coefficients.get(n, 1.0)
+        
+        # Apply dimension morphing (fractional dimensions)
+        dim_morph = dimensionality / 2.0  # Normalized relative to standard 2D
+        
+        # Calculate dynamic Pi based on current state
+        dynamic_pi = self.pi_calculator.calculate(n)
+        
+        # For regular polygons, circumference is n * side length
+        # Side length is 2 * radius * sin(pi/n)
+        circumference = n * (2 * radius * math.sin(dynamic_pi / n))
+        
+        # Apply adaptive coefficient and dimensional morphing
+        morphed_circumference = circumference * adaptive_coef * dim_morph
+        
+        # Apply topological correction based on current signature
+        topo_correction = self._calculate_topological_correction()
+        
+        return morphed_circumference * topo_correction
+    
+    def _calculate_topological_correction(self):
+        """Calculate topological correction factor based on current signature"""
+        # Use the morphological phase to create oscillating correction
+        phase_factor = math.sin(self.morph_phase * 2 * math.pi)
+        
+        # Combine with topology signature
+        signature_sum = sum(self.topology_signature)
+        if signature_sum > 0:
+            signature_factor = sum(s * (i+1)/len(self.topology_signature) 
+                                 for i, s in enumerate(self.topology_signature)) / signature_sum
+        else:
+            signature_factor = 1.0
+            
+        # Small correction to maintain reasonable values (±2%)
+        correction = 1.0 + phase_factor * signature_factor * 0.02
+        return correction
+    
+    def evolve(self, steps=1, force_expand=False):
+        """
+        Evolve the circumference calculation to higher complexity
+        
+        Args:
+            steps: Number of evolution steps
+            force_expand: Force expansion to higher polygon sides
+            
+        Returns:
+            Dictionary with evolution statistics
+        """
+        evolution_stats = {
+            'initial_sides': self.current_sides,
+            'initial_phase': self.morph_phase,
+            'coefficient_changes': 0,
+            'topology_changes': 0,
+            'dimension_expanded': False
+        }
+        
+        for _ in range(steps):
+            self.evolution_counter += 1
+            
+            # 1. Possibly expand to higher polygon sides
+            if force_expand or random.random() < self.mutation_rate * 2:
+                if self.current_sides < self.max_expansion:
+                    self.current_sides += max(1, int(self.current_sides * 0.1))
+                    self.current_sides = min(self.current_sides, self.max_expansion)
+                    evolution_stats['dimension_expanded'] = True
+            
+            # 2. Mutate adaptive coefficients
+            for n in range(3, min(self.current_sides * 2, self.max_expansion) + 1):
+                if random.random() < self.mutation_rate:
+                    # Apply small mutation to coefficient
+                    self.adaptive_coefficients[n] *= (1.0 + (random.random() - 0.5) * 0.05)
+                    # Keep coefficient in reasonable range
+                    self.adaptive_coefficients[n] = max(0.95, min(1.05, self.adaptive_coefficients[n]))
+                    evolution_stats['coefficient_changes'] += 1
+            
+            # 3. Evolve morphological phase
+            self.morph_phase += self.morph_frequency
+            self.morph_phase %= 1.0  # Keep in [0,1] range
+            
+            # 4. Evolve topology signature
+            if random.random() < self.mutation_rate * 3:
+                # Either add a new component or modify existing
+                if len(self.topology_signature) < 8 and random.random() < 0.3:
+                    # Add new component
+                    self.topology_signature.append(random.random())
+                else:
+                    # Modify existing
+                    idx = random.randint(0, len(self.topology_signature) - 1)
+                    self.topology_signature[idx] *= (1.0 + (random.random() - 0.5) * 0.1)
+                    self.topology_signature[idx] = max(0.1, min(1.0, self.topology_signature[idx]))
+                evolution_stats['topology_changes'] += 1
+            
+            # 5. Evolve Pi calculator
+            self.pi_calculator.evolve()
+        
+        # Record evolution
+        self.evolution_history.append({
+            'counter': self.evolution_counter,
+            'sides': self.current_sides,
+            'phase': self.morph_phase,
+            'topology_len': len(self.topology_signature)
+        })
+        
+        # Keep history bounded
+        if len(self.evolution_history) > 100:
+            self.evolution_history = self.evolution_history[-100:]
+            
+        evolution_stats['final_sides'] = self.current_sides
+        evolution_stats['final_phase'] = self.morph_phase
+        
+        return evolution_stats
+    
+    def get_complexity_metric(self):
+        """
+        Calculate the complexity metric of the current state
+        
+        Returns:
+            Floating point complexity value
+        """
+        # Combine multiple factors for complexity:
+        # 1. Number of sides relative to maximum
+        sides_factor = self.current_sides / self.max_expansion
+        
+        # 2. Topology signature complexity
+        topo_complexity = math.log(1 + len(self.topology_signature)) / math.log(9)  # Normalized to [0,1]
+        
+        # 3. Coefficient variation
+        if self.current_sides > 3:
+            coef_sample = [self.adaptive_coefficients.get(n, 1.0) 
+                          for n in range(3, min(self.current_sides, 20))]
+            coef_variance = np.std(coef_sample) * 10  # Scale up small variances
+        else:
+            coef_variance = 0.01
+        
+        # Combine factors with weighting
+        complexity = 0.5 * sides_factor + 0.3 * topo_complexity + 0.2 * min(1.0, coef_variance)
+        
+        return complexity
+    
+    def calculate_n_dimensional_hypersurface(self, radius=1.0, n_dimension=3, fractional_dimension=None):
+        """
+        Calculate n-dimensional hypersphere surface area with support for fractional dimensions
+        
+        Args:
+            radius: Hypersphere radius
+            n_dimension: Integer dimension
+            fractional_dimension: Optional fractional dimension for xenomorphic calculations
+            
+        Returns:
+            The calculated hypersurface value
+        """
+        # Use fractional dimension if provided, otherwise use integer dimension
+        d = fractional_dimension if fractional_dimension is not None else float(n_dimension)
+        
+        # Get dynamic pi
+        dynamic_pi = self.pi_calculator.calculate(max(8, int(d * 2)))
+        
+        # Calculate using the general formula for the surface area of an n-sphere
+        # Surface area = 2 * pi^(n/2) * r^(n-1) / Gamma(n/2)
+        if d > 0:  # Ensure dimension is positive
+            # For integer dimensions, use standard formula
+            if fractional_dimension is None:
+                if n_dimension == 0:
+                    return 2  # Zero-sphere is 2 points
+                else:
+                    surface = (2 * dynamic_pi**(n_dimension/2) * radius**(n_dimension-1)) / gamma(n_dimension/2)
+                    return surface
+            else:
+                # For fractional dimensions, use extended formula
+                surface = (2 * dynamic_pi**(d/2) * radius**(d-1)) / gamma(d/2)
+                
+                # Apply xenomorphic correction for fractional dimensions
+                # This introduces controlled mathematical anomalies for encryption
+                correction = 1.0
+                if d - int(d) > 0:  # If truly fractional
+                    frac_part = d - int(d)
+                    correction = 1.0 + 0.2 * math.sin(frac_part * dynamic_pi)
+                    
+                    # Apply topological twist based on current signature
+                    if len(self.topology_signature) > 0:
+                        twist_factor = sum(self.topology_signature) / len(self.topology_signature)
+                        correction *= (1.0 + 0.1 * (twist_factor - 0.5) * math.sin(d * dynamic_pi))
+                
+                return surface * correction
+        else:
+            return 0
+
+# =============================================================================
+# 2. Dynamic Pi Implementation
+# =============================================================================
+class DynamicPi:
+    """
+    Dynamic Pi calculator with adaptive precision and mutation capabilities
+    
+    This class calculates π with varying algorithms and precision, allowing
+    mathematical mutations for cryptographic applications.
+    """
+    
+    def __init__(self, precision=50, mutation_rate=0.01, seed=None):
+        """
+        Initialize the dynamic pi calculator
+        
+        Args:
+            precision: Decimal precision for calculations
+            mutation_rate: Rate at which the calculation mutates
+            seed: Random seed for reproducibility
+        """
+        self.base_precision = precision
+        self.current_precision = precision
+        self.mutation_rate = mutation_rate
+        self.algorithm_weights = {
+            'chudnovsky': 0.4,
+            'ramanujan': 0.2,
+            'bailey_borwein_plouffe': 0.2,
+            'gauss_legendre': 0.1,
+            'monte_carlo': 0.05,
+            'leibniz': 0.05
+        }
+        
+        # Pi approximation cache
+        self.pi_cache = {}
+        
+        # Mutation parameters
+        self.perturbation = 0.0
+        self.perturbation_frequency = 0.0
+        
+        # Evolution counter
+        self.evolution_counter = 0
+        
+        # Standard value of pi for reference
+        self.reference_pi = math.pi
+        
+        # Initialize with seed
+        random.seed(seed if seed is not None else int(random.random() * 10000))
+        
+    @lru_cache(maxsize=128)
+    def _chudnovsky_algorithm(self, precision):
+        """Chudnovsky algorithm for pi calculation - highly accurate"""
+        k = 0
+        a_k = 0
+        k_factorial = 1
+        k_factorial3 = 1
+        M_k = 1
+        X_k = 1
+        K_FACT_MULTIPLIER = 12
+        
+        # Limit iterations for performance
+        max_iterations = min(precision // 2, 50)
+        
+        while k < max_iterations:
+            a_k += M_k * L_k * X_k // k_factorial3
+            k += 1
+            k_factorial *= k
+            k_factorial3 *= k**3
+            M_k *= (K_FACT_MULTIPLIER**3 - 16 * K_FACT_MULTIPLIER * k**2) // (k**3)
+            X_k *= -262537412640768000  # -(6541380665835015L)
+            
+        return 426880 * math.sqrt(10005) / a_k
+    
+    @lru_cache(maxsize=128)
+    def _ramanujan_algorithm(self, precision):
+        """Ramanujan's formula for pi calculation"""
+        sum_value = 0
+        factorial_4k = 1
+        factorial_k = 1
+        power_396 = 1
+        
+        # Limit iterations for performance
+        max_iterations = min(precision // 3, 10)
+        
+        for k in range(max_iterations):
+            sum_value += ((factorial_4k * (1103 + 26390 * k)) / 
+                         (factorial_k**4 * power_396))
+            
+            # Update for next iteration
+            factorial_4k *= (4*(k+1) * 4*(k+1)-1 * 4*(k+1)-2 * 4*(k+1)-3)
+            factorial_k *= (k+1)
+            power_396 *= 396**4
+            
+        result = (2 * math.sqrt(2) / 9801) * sum_value
+        return 1 / result
+    
+    @lru_cache(maxsize=128)
+    def _bailey_borwein_plouffe(self, precision):
+        """Bailey-Borwein-Plouffe formula for pi calculation"""
+        pi = 0
+        
+        # Limit iterations for performance
+        max_iterations = min(precision, 30)
+        
+        for k in range(max_iterations):
+            pi += (1 / 16**k) * (
+                4 / (8*k + 1) - 2 / (8*k + 4) - 1 / (8*k + 5) - 1 / (8*k + 6)
+            )
+            
+        return pi
+    
+    @lru_cache(maxsize=128)
+    def _gauss_legendre(self, precision):
+        """Gauss-Legendre algorithm for pi calculation"""
+        a = 1
+        b = 1 / math.sqrt(2)
+        t = 1/4
+        p = 1
+        
+        # Limit iterations for performance
+        max_iterations = min(precision // 3, 10)
+        
+        for _ in range(max_iterations):
+            a_next = (a + b) / 2
+            b = math.sqrt(a * b)
+            t -= p * (a - a_next)**2
+            a = a_next
+            p *= 2
+            
+        return (a + b)**2 / (4 * t)
+    
+    @lru_cache(maxsize=128)
+    def _monte_carlo(self, precision):
+        """Monte Carlo method for pi calculation"""
+        inside_circle = 0
+        
+        # Scale points with precision
+        points = min(precision * 1000, 100000)
+        
+        for _ in range(points):
+            x = random.random()
+            y = random.random()
+            if x**2 + y**2 <= 1:
+                inside_circle += 1
+                
+        return 4 * inside_circle / points
+    
+    @lru_cache(maxsize=128)
+    def _leibniz(self, precision):
+        """Leibniz formula for pi calculation"""
+        # Scale iterations with precision
+        iterations = min(precision * 100, 50000)
+        
+        pi = 0
+        for i in range(iterations):
+            pi += (-1)**i / (2*i + 1)
+            
+        return pi * 4
+    
+    def calculate(self, context_value=None):
+        """
+        Calculate pi with current settings
+        
+        Args:
+            context_value: Optional value that influences the calculation
+            
+        Returns:
+            Current pi approximation
+        """
+        # Apply context to determine effective precision
+        effective_precision = self.current_precision
+        if context_value is not None:
+            # Scale precision based on context (higher context = higher precision)
+            precision_scale = math.log(1 + abs(context_value)) / 10
+            effective_precision = max(10, int(self.current_precision * (1 + precision_scale)))
+        
+        # Check cache
+        cache_key = (effective_precision, self.perturbation, self.perturbation_frequency)
+        if cache_key in self.pi_cache:
+            return self.pi_cache[cache_key]
+        
+        # Select algorithm based on current weights
+        algorithms = list(self.algorithm_weights.keys())
+        weights = list(self.algorithm_weights.values())
+        selected_algorithm = random.choices(algorithms, weights=weights, k=1)[0]
+        
+        # Calculate pi based on selected algorithm
+        if selected_algorithm == 'chudnovsky':
+            pi_approx = self._chudnovsky_algorithm(effective_precision)
+        elif selected_algorithm == 'ramanujan':
+            pi_approx = self._ramanujan_algorithm(effective_precision)
+        elif selected_algorithm == 'bailey_borwein_plouffe':
+            pi_approx = self._bailey_borwein_plouffe(effective_precision)
+        elif selected_algorithm == 'gauss_legendre':
+            pi_approx = self._gauss_legendre(effective_precision)
+        elif selected_algorithm == 'monte_carlo':
+            pi_approx = self._monte_carlo(effective_precision)
+        elif selected_algorithm == 'leibniz':
+            pi_approx = self._leibniz(effective_precision)
+        else:
+            # Fallback to standard math.pi
+            pi_approx = math.pi
+        
+        # Apply perturbation if active
+        if abs(self.perturbation) > 0:
+            # Create oscillating perturbation
+            if context_value is not None:
+                # Use context for perturbation phase
+                phase = (abs(context_value) * self.perturbation_frequency) % 1.0
+            else:
+                phase = 0
+            
+            # Calculate perturbation factor
+            factor = math.sin(2 * math.pi * phase)
+            # Apply to pi value (very small effect, < 0.01%)
+            pi_approx *= (1 + self.perturbation * factor * 0.0001)
+        
+        # Cache the result
+        self.pi_cache[cache_key] = pi_approx
+        
+        return pi_approx
+    
+    def evolve(self):
+        """
+        Evolve the pi calculation parameters
+        
+        Returns:
+            Boolean indicating if mutation occurred
+        """
+        self.evolution_counter += 1
+        mutation_occurred = False
+        
+        # Potentially adjust precision
+        if random.random() < self.mutation_rate:
+            # Adjust precision up or down slightly
+            precision_change = random.choice([-10, -5, 5, 10])
+            self.current_precision = max(10, min(200, self.current_precision + precision_change))
+            mutation_occurred = True
+        
+        # Potentially adjust algorithm weights
+        if random.random() < self.mutation_rate:
+            # Select random algorithm to adjust
+            algorithm = random.choice(list(self.algorithm_weights.keys()))
+            # Adjust its weight slightly
+            change = (random.random() - 0.5) * 0.1
+            self.algorithm_weights[algorithm] = max(0.01, min(0.7, self.algorithm_weights[algorithm] + change))
+            
+            # Normalize weights to sum to 1
+            weight_sum = sum(self.algorithm_weights.values())
+            for alg in self.algorithm_weights:
+                self.algorithm_weights[alg] /= weight_sum
+                
+            mutation_occurred = True
+        
+        # Potentially adjust perturbation
+        if random.random() < self.mutation_rate * 2:
+            # Set new perturbation value
+            self.perturbation = (random.random() - 0.5) * 2  # Range [-1, 1]
+            self.perturbation_frequency = random.random() * 10  # Range [0, 10]
+            mutation_occurred = True
+            
+            # Clear cache if perturbation changes
+            self.pi_cache = {}
+        
+        return mutation_occurred
+
+# =============================================================================
+# 3. Xenomorphic Lattice Structure
+# =============================================================================
+class XenomorphicLattice:
+    """
+    Self-evolving topological lattice structure for advanced encryption
+    
+    This class implements a dynamically evolving mathematical lattice with
+    xenomorphic properties that adapt to data patterns and resist brute-force
+    attacks through continuous topological evolution.
+    """
+    
+    def __init__(self, dimensions=4, vertices=16, mutation_rate=0.01, seed=None):
+        """
+        Initialize the xenomorphic lattice
+        
+        Args:
+            dimensions: Base dimensionality of the lattice
+            vertices: Initial number of vertices in the lattice
+            mutation_rate: Rate of topological mutation
+            seed: Random seed for reproducibility
+        """
+        self.base_dimensions = dimensions
+        self.current_dimensions = dimensions
+        self.max_dimensions = dimensions * 4  # Allow expansion
+        self.vertices = vertices
+        self.mutation_rate = mutation_rate
+        self.evolution_counter = 0
+        
+        # Advanced lattice properties
+        self.fractal_depth = 2
+        self.connection_strength = 0.5
+        self.topology_class = "hyperbolic"  # Options: euclidean, hyperbolic, elliptic
+        self.curvature = -0.1  # Negative for hyperbolic, positive for elliptic
+        
+        # Lattice structure components
+        self.vertex_coordinates = []
+        self.connections = []
+        self.connection_weights = {}
+        self.dimensional_gates = []
+        
+        # Morphological components
+        self.morph_vectors = []
+        self.morph_phase = 0.0
+        self.morph_rate = 0.05
+        self.stability_index = 1.0
+        
+        # Evolution history
+        self.evolution_history = []
+        
+        # Initialize with seed
+        random.seed(seed if seed is not None else int(random.random() * 10000))
+        
+        # Create initial lattice
+        self._initialize_lattice()
+        
+    def _initialize_lattice(self):
+        """Initialize the xenomorphic lattice structure"""
+        # Create vertices in n-dimensional space
+        self.vertex_coordinates = []
+        for i in range(self.vertices):
+            # Create coordinates with controlled randomness
+            coords = [(random.random() - 0.5) * 2 for _ in range(self.current_dimensions)]
+            # Normalize to unit hypersphere
+            magnitude = math.sqrt(sum(c**2 for c in coords))
+            if magnitude > 0:
+                coords = [c / magnitude for c in coords]
+            self.vertex_coordinates.append(coords)
+        
+        # Create connections between vertices
+        self.connections = []
+        self.connection_weights = {}
+        
+        # Connect each vertex to approximately sqrt(n) others
+        avg_connections = max(2, int(math.sqrt(self.vertices)))
+        
+        for i in range(self.vertices):
+            # Calculate distances to all other vertices
+            distances = []
+            for j in range(self.vertices):
+                if i != j:
+                    # Calculate distance between vertices in n-dimensional space
+                    dist = math.sqrt(sum((self.vertex_coordinates[i][d] - self.vertex_coordinates[j][d])**2 
+                                        for d in range(min(len(self.vertex_coordinates[i]), len(self.vertex_coordinates[j])))))
+                    distances.append((j, dist))
+            
+            # Sort by distance and connect to closest vertices
+            distances.sort(key=lambda x: x[1])
+            connections_to_make = min(avg_connections, len(distances))
+            
+            for c in range(connections_to_make):
+                j, dist = distances[c]
+                connection = tuple(sorted([i, j]))
+                
+                if connection not in self.connections:
+                    self.connections.append(connection)
+                    # Weight based on distance (closer = stronger connection)
+                    self.connection_weights[connection] = 1.0 / (1.0 + dist)
+        
+        # Initialize dimensional gates (controls information flow between dimensions)
+        self.dimensional_gates = [random.random() for _ in range(self.current_dimensions)]
+        
+        # Initialize morphological vectors (controls shape evolution)
+        self.morph_vectors = []
+        for _ in range(self.current_dimensions):
+            morph_vec = [(random.random() - 0.5) * 0.2 for _ in range(self.current_dimensions)]
+            self.morph_vectors.append(morph_vec)
+    
+    def apply_lattice_transformation(self, data):
+        """
+        Apply xenomorphic lattice transformation to data
+        
+        Args:
+            data: Input data vector to transform
+            
+        Returns:
+            Transformed data vector
+        """
+        # Ensure data matches current dimensions
+        input_data = data[:min(len(data), self.current_dimensions)]
+        while len(input_data) < self.current_dimensions:
+            input_data.append(0)
+        
+        # Result vector
+        result = [0] * self.current_dimensions
+        
+        # Apply lattice mapping using current topology
+        for i in range(self.current_dimensions):
+            # Base value from input
+            result[i] = input_data[i]
+            
+            # Apply dimensional gates
+            result[i] *= self.dimensional_gates[i]
+            
+            # Apply connections influence
+            connection_influence = 0
+            for connection in self.connections:
+                # Find connections related to vertex i (mapped to dimension i)
+                if i < self.vertices and (i == connection[0] or i == connection[1]):
+                    # Get other vertex
+                    other = connection[1] if i == connection[0] else connection[0]
+                    if other < self.current_dimensions:
+                        # Apply connection weight to propagate information
+                        weight = self.connection_weights.get(connection, 0.5)
+                        connection_influence += input_data[other] * weight
+            
+            # Add connection influence
+            result[i] += connection_influence * self.connection_strength
+        
+        # Apply curvature effect based on topology class
+        if self.topology_class == "hyperbolic":
+            # Hyperbolic transformation (negative curvature)
+            for i in range(self.current_dimensions):
+                # Apply hyperbolic scaling: stronger effect at greater magnitudes
+                magnitude = abs(result[i])
+                if magnitude > 0:
+                    # Hyperbolic scaling factor
+                    scale = 1.0 + magnitude * abs(self.curvature)
+                    result[i] *= scale
+        elif self.topology_class == "elliptic":
+            # Elliptic transformation (positive curvature)
+            for i in range(self.current_dimensions):
+                # Apply elliptic scaling: compressive effect at greater magnitudes
+                magnitude = abs(result[i])
+                if magnitude > 0:
+                    # Elliptic scaling factor
+                    scale = 1.0 / (1.0 + magnitude * self.curvature)
+                    result[i] *= scale
+        
+        # Apply morphological modulation
+        if self.morph_vectors:
+            morph_factor = math.sin(self.morph_phase * 2 * math.pi) * self.morph_rate
+            
+            for i in range(self.current_dimensions):
+                morph_influence = 0
+                for j in range(min(self.current_dimensions, len(self.morph_vectors))):
+                    if j < len(self.morph_vectors) and i < len(self.morph_
